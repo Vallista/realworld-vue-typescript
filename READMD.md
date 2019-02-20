@@ -1,1 +1,0 @@
-# RealWorld example (Vue + TypeScript)
