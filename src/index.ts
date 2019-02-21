@@ -1,5 +1,7 @@
 import Vue from 'vue'
-import RealWorld from './components/RealWorld.vue'
+import RealWorld from './RealWorld.vue'
+import router from './router/router'
+
 
 new Vue({
     el: "#app",
@@ -13,5 +15,6 @@ new Vue({
     },
     components: {
         RealWorld
-    }
+    },
+    router
 })
