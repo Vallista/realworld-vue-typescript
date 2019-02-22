@@ -8,8 +8,8 @@
 
 <script lang="ts">
 import { Vue, Component, Prop} from 'vue-property-decorator'
-import GnbHeader from './components/header/GnbHeadeer.vue'
-import GnbFooter from './components/footer/GnbFooter.vue'
+import GnbHeader from './components/GnbHeadeer.vue'
+import GnbFooter from './components/GnbFooter.vue'
 
 @Component({
     components: {

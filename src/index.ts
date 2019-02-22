@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import RealWorld from './RealWorld.vue'
 import router from './router/router'
+import index from './store'
 
 
 new Vue({
@@ -16,5 +17,6 @@ new Vue({
     components: {
         RealWorld
     },
-    router
+    router,
+    store: index
 })

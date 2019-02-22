@@ -35,17 +35,14 @@ module.exports = {
     resolve: {
         extensions: ['.ts', '.js', '.vue', '.json'],
         alias: {
-            'vue$': 'vue/dist/vue.esm.js'
+            'vue$': 'vue/dist/vue.esm.js',
+            '@': path.resolve('src'),
         }
-    },
-    devServer: {
-        historyApiFallback: true,
-        noInfo: true
     },
     performance: {
         hints: false
     },
-    devtool: '#eval-source-map',
+    devtool: '#source-map',
     plugins: [
         // make sure to include the plugin for the magic
         new VueLoaderPlugin()
@@ -71,4 +68,12 @@ if (process.env.NODE_ENV === 'production') {
             minimize: true
         })
     ])
+} else {
+    module.exports.mode = 'development'
+    module.exports.devServer = {
+        host: '0.0.0.0',
+        port: 8080,
+        historyApiFallback: true,
+        noInfo: true
+    }
 }
