@@ -12,7 +12,7 @@ export default class TagItem extends Vue {
 
     async getArticlesByTag(params: any) {
         this.$store.dispatch('changeTabByTag', params.tag)
-        await this.$store.dispatch('getArticlesByFilter', params)
+        this.$store.dispatch('getArticlesByFilter', params)
     }
 }
 </script>

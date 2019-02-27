@@ -19,15 +19,15 @@ import Vue from 'vue'
 import {Component, Prop} from 'vue-property-decorator'
 
 @Component
-export default class ClassName extends Vue {
-    @Prop(Array) pages: Array<number>
-    @Prop(Number) currentPage: number
+export default class Pagination extends Vue {
+    @Prop(Array) pages?: Array<number>
+    @Prop(Number) currentPage?: number
 
-    changePage(page) {
+    changePage(page: number) {
         if (page === this.currentPage) return
         this.$emit("changePage", page)
     }
-    paginationClass(page) {
+    paginationClass(page: number) {
         return {
             "page-name": true,
             'active': this.currentPage === page

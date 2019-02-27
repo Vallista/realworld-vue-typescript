@@ -2,28 +2,18 @@
     <div class="auth-page">
         <div class="container page">
             <div class="row">
-
                 <div class="col-md-6 offset-md-3 col-xs-12">
                     <h1 class="text-xs-center">Sign up</h1>
                     <p class="text-xs-center">
-                        <a href="">Have an account?</a>
+                        <router-link to="/login">Have an account?</router-link>
                     </p>
-
-                    <ul class="error-messages">
-                        <li>That email is already taken</li>
-                    </ul>
-
+                    <error-message-list/>
                     <form>
-                        <fieldset class="form-group">
-                            <input class="form-control form-control-lg" type="text" placeholder="Your Name">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <input class="form-control form-control-lg" type="text" placeholder="Email">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <input class="form-control form-control-lg" type="password" placeholder="Password">
-                        </fieldset>
-                        <button class="btn btn-lg btn-primary pull-xs-right">
+                        <input-field-common v-for="fieldData in fieldDataList"
+                                            :key="fieldData.index"
+                                            :fieldData="fieldData"
+                                            @emit="getInputValue"/>
+                        <button class="btn btn-lg btn-primary pull-xs-right" @click="register">
                             Sign up
                         </button>
                     </form>
@@ -37,10 +27,70 @@
 <script lang="ts">
 import Vue from 'vue'
 import {Component, Prop} from 'vue-property-decorator'
+import InputFieldCommon from "@/components/InputFieldCommon.vue";
+import {InputFieldProps} from "../../types";
+import ErrorMessageList from "../../components/ErrorMessageList.vue";
 
-@Component
+@Component({
+    components: {
+        InputFieldCommon,
+        ErrorMessageList,
+    }
+})
 export default class SignUp extends Vue {
+    fieldDataList : Array<InputFieldProps> = [
+        {
+            inputType: 'text',
+            placeholder: 'Your Name',
+            model: 'name',
+        },
+        {
+            inputType: 'text',
+            placeholder: 'Email',
+            model: 'email',
+        },
+        {
+            inputType: 'password',
+            placeholder: 'Password',
+            model: 'password',
+        },
+    ]
 
+    name : string = ''
+    email : string = ''
+    password : string = ''
+
+    getInputValue({ value, model } : any) : void {
+        switch (model) {
+            case 'name' :
+                this.name = value
+                break
+            case 'password' :
+                this.password = value
+                break
+            case 'email' :
+                this.email = value
+                break
+            default : return
+        }
+    }
+
+    async register() {
+        try {
+            await this.$store.dispatch('registerUser', {
+                email: this.email,
+                username: this.name,
+                password: this.password
+            })
+            await this.$store.dispatch('loginUser', {
+                email: this.email,
+                password: this.password
+            })
+            this.$router.push('/')
+        } catch({response}) {
+            this.$store.commit('setErrors', response.data.errors)
+        }
+    }
 }
 </script>
 

@@ -1,9 +1,9 @@
 <template>
     <div class="home-page">
-        <div class="banner">
+        <div class="banner" v-if="!auth">
             <div class="container">
                 <h1 class="logo-font">conduit</h1>
-                <p>A place to messagakwlj your knowledge.</p>
+                <p>A place to your knowledge.</p>
             </div>
         </div>
         <div class="container page">
@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import {Component, Prop, Watch } from 'vue-property-decorator'
+import {Component} from 'vue-property-decorator'
 import FeedTab from '@/components/FeedTab.vue'
 import ArticleList from '@/components/ArticleList.vue';
 import TagItem from "@/components/TagItem.vue";
@@ -43,7 +43,9 @@ import TagItem from "@/components/TagItem.vue";
     },
 })
 export default class Home extends Vue {
-
+    get auth() {
+        return this.$store.state.auth.isAuth
+    }
     get articlesList(): Array<object> {
         return this.$store.getters.articlesList
     }

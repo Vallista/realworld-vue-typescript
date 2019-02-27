@@ -42,7 +42,7 @@ module.exports = {
     performance: {
         hints: false
     },
-    devtool: '#source-map',
+    devtool: 'source-map',
     plugins: [
         // make sure to include the plugin for the magic
         new VueLoaderPlugin()

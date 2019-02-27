@@ -1,8 +1,8 @@
 <template>
-    <li class="nav-item">
+    <li class="nav-item" v-if="isVisible">
         <a class="nav-link"
            :class="{active: isActive}"
-           @click="changeTab">
+           @click="changeTab(item.href)">
             {{ item.title }}
         </a>
     </li>
@@ -16,16 +16,29 @@
     @Component
     export default class FeedTabItem extends Vue {
         @Prop() item?: FeedTabObj
-        get isActive() : Boolean {
+
+        get isVisible(): boolean {
+            if (this.item && this.item.isAuth) {
+                return this.item.isAuth === this.$store.state.auth.isAuth
+            }
+            return true
+        }
+
+        get isActive() : boolean {
             if (this.item) {
                 return this.item.isActive
             }
             return false
         }
 
-        changeTab(): void {
-            if (this.item) {
-                this.$store.dispatch('changeTab', this.item.href)
+        changeTab(href: string): void {
+            this.$store.dispatch('changeTab', href)
+            if (href === 'global') {
+                this.$store.dispatch('getGlobalArticles')
+            } else if (href === 'feed') {
+                this.$store.dispatch('getFeedArticles')
+            } else {
+                this.$store.dispatch('getArticlesByFilter', { tag: href })
             }
         }
     }

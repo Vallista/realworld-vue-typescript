@@ -3,7 +3,9 @@
         <div class="article-meta">
             <a href=""><img :src="contents.author.image" /></a>
             <div class="info">
-                <router-link to="" class="author">{{ contents.author.username }}</router-link>
+                <router-link :to="`/profile/${contents.author.username}`"
+                             class="author">{{ contents.author.username }}
+                </router-link>
                 <span class="date">{{ createdAt }}</span>
             </div>
             <button class="btn btn-outline-primary btn-sm pull-xs-right" :class="{active: contents.favorited}">

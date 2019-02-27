@@ -5,7 +5,10 @@
                              :key="article.index"
                              :contents="article"/>
         </div>
-        <div v-else>Loading articles...</div>
+        <div class="article-preview" v-else>Loading articles...</div>
+        <div class="article-preview" v-if="!loadingState && isArticlesEmpty">
+            No articles are here... yet.
+        </div>
     </div>
 </template>
 
@@ -21,7 +24,15 @@ import ArticlePreview from '@/components/ArticlePreview.vue'
 })
 export default class ArticleList extends Vue {
     @Prop(Array) articles?: Array<object>
-    get loadingState(): Boolean {
+
+    get isArticlesEmpty(): boolean {
+        if (this.articles) {
+            return this.articles.length < 1
+        }
+        return true
+    }
+
+    get loadingState(): boolean {
         return this.$store.state.home.articleListIsLoading
     }
 }

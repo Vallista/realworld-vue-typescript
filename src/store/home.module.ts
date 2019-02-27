@@ -1,6 +1,5 @@
 import axios from 'axios'
 import {FeedTabObj, HomeState} from '../types'
-import FeedTab from "../components/FeedTab.vue";
 
 const state: HomeState = {
     articles: [{}],
@@ -12,11 +11,13 @@ const state: HomeState = {
             title: 'Your Feed',
             href: 'feed',
             isActive: false,
+            isAuth: true,
         },
         {
             title: 'Global Feed',
             href: 'global',
             isActive: true,
+            isAuth: false,
         }
     ]
 }
@@ -31,7 +32,7 @@ const getters = {
 }
 
 const mutations = {
-    clearArticleList(state: HomeState) {
+    clearArticles(state: HomeState) {
         state.articles = [{}]
         state.articleListIsLoading = true
     },
@@ -65,7 +66,8 @@ const mutations = {
         arr.push({
             title: `# ${payload}`,
             href: payload,
-            isActive: true
+            isActive: true,
+            isAuth: false,
         })
         state.feedTabMenus = arr
     }
@@ -73,19 +75,19 @@ const mutations = {
 
 const actions = {
     async getGlobalArticles({ commit }: any) {
-        commit('clearArticleList')
+        commit('clearArticles')
         const result = await axios.get('https://conduit.productionready.io/api/articles')
         commit('setArticles', result.data.articles)
         commit('setArticlesCount', result.data.articlesCount)
     },
     async getFeedArticles({ commit }: any) {
-        commit('clearArticleList')
+        commit('clearArticles')
         const result = await axios.get('https://conduit.productionready.io/api/articles/feed')
         commit('setArticles', result.data.articles)
         commit('setArticlesCount', result.data.articlesCount)
     },
     async getArticlesByFilter({ commit }: any, filter: Object) {
-        commit('clearArticleList')
+        commit('clearArticles')
         const result = await axios.get('https://conduit.productionready.io/api/articles', { params: filter })
         commit('setArticles', result.data.articles)
         commit('setArticlesCount', result.data.articlesCount)

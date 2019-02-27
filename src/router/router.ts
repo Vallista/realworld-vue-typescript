@@ -19,10 +19,12 @@ const routes = [
     },
     {
         path: '/login',
+        name: 'login',
         component: Login,
     },
     {
         path: '/register',
+        name: 'register',
         component: SignUp,
     },
     {
@@ -42,7 +44,8 @@ const routes = [
         component: Setting,
     },
     {
-        path: '/profile',
+        path: '/profile/:id',
+        props: true,
         component: Profile,
     },
 ]
