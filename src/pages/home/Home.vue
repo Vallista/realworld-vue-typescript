@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import {Component} from 'vue-property-decorator'
+import {Component, Prop} from 'vue-property-decorator'
 import FeedTab from '@/components/FeedTab.vue'
 import ArticleList from '@/components/ArticleList.vue';
 import TagItem from "@/components/TagItem.vue";
@@ -43,6 +43,8 @@ import TagItem from "@/components/TagItem.vue";
     },
 })
 export default class Home extends Vue {
+    @Prop(String) contents?: string
+
     get auth() {
         return this.$store.state.auth.isAuth
     }

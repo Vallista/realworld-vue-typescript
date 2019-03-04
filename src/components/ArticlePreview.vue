@@ -1,22 +1,17 @@
 <template>
     <div class="article-preview">
         <div class="article-meta">
-            <a href=""><img :src="contents.author.image" /></a>
-            <div class="info">
-                <router-link :to="`/profile/${contents.author.username}`"
-                             class="author">{{ contents.author.username }}
-                </router-link>
-                <span class="date">{{ createdAt }}</span>
-            </div>
-            <button class="btn btn-outline-primary btn-sm pull-xs-right" :class="{active: contents.favorited}">
-                <i class="ion-heart"></i> {{ contents.favoritesCount }}
-            </button>
+            <user-info :author="contents.author" :created="createdAt">
+                <button class="btn btn-outline-primary btn-sm pull-xs-right" :class="{active: contents.favorited}">
+                    <i class="ion-heart"></i> {{ contents.favoritesCount }}
+                </button>
+            </user-info>
         </div>
-        <a hgref="" class="preview-link">
+        <router-link :to="`/article/${contents.slug}`" class="preview-link">
             <h1>{{ contents.title }}</h1>
             <p>{{ contents.description }}</p>
             <span>Read more...</span>
-        </a>
+        </router-link>
     </div>
 </template>
 
@@ -24,8 +19,13 @@
 import Vue from 'vue'
 import {Component, Prop} from 'vue-property-decorator'
 import moment from 'moment'
+import UserInfo from "./UserInfo.vue";
 
-@Component
+@Component ({
+    components: {
+        UserInfo,
+    }
+})
 export default class ArticlePreview extends Vue {
     @Prop(Object) contents?: any
 

@@ -1,6 +1,9 @@
 import axios from 'axios'
 import JwtService from '../jwt.service'
 import {LoginUser, RegisterUser, UpdateUser} from '../types'
+import {ApiService} from "./util"
+
+const apiService = new ApiService
 
 const state = {
     errors: null,
@@ -13,7 +16,6 @@ const getters = {
 }
 
 const mutations = {
-
     setErrors(state : any, errors: any ) {
         state.errors = errors
     },
@@ -31,35 +33,33 @@ const mutations = {
         state.errors = {}
         JwtService.destroyToken()
     }
-
 }
 
 const actions = {
 
     async registerUser({ commit, dispatch } : any, userParams : RegisterUser) {
-        const result = await axios.post('https://conduit.productionready.io/api/users',{ "user": userParams } )
+        const result = await apiService.post('/users/',{ "user": userParams } )
     },
 
     async loginUser({ commit } : any, userParams: LoginUser) {
-        const result = await axios.post('https://conduit.productionready.io/api/users/login', { "user": userParams } )
+        const result = await apiService.post('/users/login/', { "user": userParams } )
         commit('setAuth', result.data.user)
     },
 
     async updateUser({ commit } : any, userParams: UpdateUser) {
-        const result = await axios.put('https://conduit.productionready.io/api/users', { "user": userParams })
+        const result = await apiService.put('/users/', { "user": userParams })
         commit('setAuth', result.data.user)
     },
 
     async getCurrentUser({ commit } : any) {
-        // result returns the User
-        const result = await axios.get('https://conduit.productionready.io/api/users')
+        const result = await apiService.get('/users/')
     },
 
     async checkAuth({commit}: any) {
         if (JwtService.getToken()) {
             axios.defaults.headers.common["Authorization"] = `Token ${JwtService.getToken()}`;
             try {
-                const result = await axios.get('https://conduit.productionready.io/api/user')
+                const result = await apiService.get('/user/')
                 commit('setAuth', result.data.user);
             } catch ({ response }) {
                 commit('setErrors', response.data.errors);
@@ -74,7 +74,7 @@ const actions = {
     },
 
     async getUserProfile({ commit } : any, username: string) {
-        const result = await axios.get(`https://conduit.productionready.io/api/profile${username}`)
+        const result = await apiService.get(`/profile/${username}/`)
     },
 }
 

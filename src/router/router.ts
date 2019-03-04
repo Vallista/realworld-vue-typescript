@@ -28,7 +28,8 @@ const routes = [
         component: SignUp,
     },
     {
-        path: '/article',
+        path: '/article/:slug',
+        props: true,
         component: Article,
     },
     {

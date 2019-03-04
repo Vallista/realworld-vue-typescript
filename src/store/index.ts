@@ -11,7 +11,9 @@ const index = new Vuex.Store({
     modules: {
         home,
         auth,
+        article,
+        profile,
     }
 })
 
-export default index;
+export default index

@@ -1,5 +1,7 @@
-import axios from 'axios'
 import {FeedTabObj, HomeState} from '../types'
+import {ApiService} from "./util"
+
+const apiService = new ApiService
 
 const state: HomeState = {
     articles: [{}],
@@ -76,32 +78,38 @@ const mutations = {
 const actions = {
     async getGlobalArticles({ commit }: any) {
         commit('clearArticles')
-        const result = await axios.get('https://conduit.productionready.io/api/articles')
+        const result = await apiService.get('/articles/')
         commit('setArticles', result.data.articles)
         commit('setArticlesCount', result.data.articlesCount)
     },
+
     async getFeedArticles({ commit }: any) {
         commit('clearArticles')
-        const result = await axios.get('https://conduit.productionready.io/api/articles/feed')
+        const result = await apiService.get('/articles/feed/')
         commit('setArticles', result.data.articles)
         commit('setArticlesCount', result.data.articlesCount)
     },
+
     async getArticlesByFilter({ commit }: any, filter: Object) {
         commit('clearArticles')
-        const result = await axios.get('https://conduit.productionready.io/api/articles', { params: filter })
+        const result = await apiService.get('/api/articles/', { params: filter })
         commit('setArticles', result.data.articles)
         commit('setArticlesCount', result.data.articlesCount)
     },
+
     async getTags({ commit }: any) {
-        const result = await axios.get('https://conduit.productionready.io/api/tags')
+        const result = await apiService.get('/tags/')
         commit('setTags', result.data.tags)
     },
+
     changeTab({commit}: any, tabName: String ) {
         commit('changeFeedTabMenus', tabName)
     },
+
     changeTabByTag({ commit }: any, tagName: String ) {
         commit('addFeedTabMenu', tagName)
     }
+
 }
 
 export default {

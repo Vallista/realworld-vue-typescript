@@ -4,14 +4,37 @@
         <div class="banner">
             <div class="container">
 
-                <h1>How to build webapps that scale</h1>
+                <h1>{{ article.title }}</h1>
 
-                <div class="article-meta">
-                    <a href=""><img src="http://i.imgur.com/Qr71crq.jpg" /></a>
-                    <div class="info">
-                        <a href="" class="author">Eric Simons</a>
-                        <span class="date">January 20th</span>
-                    </div>
+                <user-info :author="article.author" :created="createdAt">
+                    <button class="btn btn-sm btn-outline-secondary" :class="{active: article.author.following}">
+                        <i class="ion-plus-round"></i>
+                        &nbsp;
+                        {{ article.author.following ? 'Unfollow' : 'Follow' }} {{ article.author.username }}
+                    </button>
+                    &nbsp;&nbsp;
+                    <button class="btn btn-sm btn-outline-primary" :class="{active : article.favorited}">
+                        <i class="ion-heart"></i>
+                        &nbsp;
+                        Favorite Post <span class="counter">({{ article.favoritesCount }})</span>
+                    </button>
+                </user-info>
+
+            </div>
+        </div>
+
+        <div class="container page">
+
+            <div class="row article-content">
+                <div class="col-md-12">
+                    {{ article.body }}
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="article-actions">
+                <user-info :author="article.author" :created="createdAt">
                     <button class="btn btn-sm btn-outline-secondary">
                         <i class="ion-plus-round"></i>
                         &nbsp;
@@ -23,45 +46,7 @@
                         &nbsp;
                         Favorite Post <span class="counter">(29)</span>
                     </button>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="container page">
-
-            <div class="row article-content">
-                <div class="col-md-12">
-                    <p>
-                        Web development technologies have evolved at an incredible clip over the past few years.
-                    </p>
-                    <h2 id="introducing-ionic">Introducing RealWorld.</h2>
-                    <p>It's a great solution for learning how other frameworks work.</p>
-                </div>
-            </div>
-
-            <hr />
-
-            <div class="article-actions">
-                <div class="article-meta">
-                    <a href="profile.html"><img src="http://i.imgur.com/Qr71crq.jpg" /></a>
-                    <div class="info">
-                        <a href="" class="author">Eric Simons</a>
-                        <span class="date">January 20th</span>
-                    </div>
-
-                    <button class="btn btn-sm btn-outline-secondary">
-                        <i class="ion-plus-round"></i>
-                        &nbsp;
-                        Follow Eric Simons <span class="counter">(10)</span>
-                    </button>
-                    &nbsp;
-                    <button class="btn btn-sm btn-outline-primary">
-                        <i class="ion-heart"></i>
-                        &nbsp;
-                        Favorite Post <span class="counter">(29)</span>
-                    </button>
-                </div>
+                </user-info>
             </div>
 
             <div class="row">
@@ -122,14 +107,45 @@
 </template>
 
 <script lang="ts">
-    import Vue from 'vue'
-    import {Component, Prop} from 'vue-property-decorator'
+import Vue from 'vue'
+import {Component, Watch} from 'vue-property-decorator'
+import moment from 'moment'
+import UserInfo from "@/components/UserInfo.vue";
 
-    @Component
-    export default class Article extends Vue {
-
+@Component ({
+    components: {
+        UserInfo,
     }
+})
+export default class Article extends Vue {
+
+    get article(): any {
+        return this.$store.state.article.currentArticle
+    }
+
+    get createdAt(): string {
+        const date = moment(this.article.createdAt).format("MMM Do YY")
+        return date
+    }
+
+    async created() {
+        await this.$store.dispatch('getArticle', this.$route.params.slug)
+    }
+
+    @Watch('$route')
+    async getArticle() {
+        await this.$store.dispatch('getArticle', this.$route.params.slug)
+    }
+
+}
 </script>
 
 <style>
+.banner .container .article-meta {
+    /*display: flex;*/
+}
+.article-actions .article-meta {
+    /*display: flex;*/
+    /*margin: 0 auto;*/
+}
 </style>
