@@ -21,7 +21,7 @@ import {FeedTabObj} from "../types";
 })
 export default class FeedTab extends Vue {
     get menus() : Array<FeedTabObj> {
-        return this.$store.state.home.feedTabMenus
+        return this.$store.getters.feedTabMenus
     }
 }
 </script>

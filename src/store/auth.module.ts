@@ -12,7 +12,15 @@ const state = {
 }
 
 const getters = {
-
+    errors(state: any) {
+        return state.errors
+    },
+    user(state: any) {
+        return state.user
+    },
+    isAuth(state: any) {
+        return state.isAuth
+    }
 }
 
 const mutations = {

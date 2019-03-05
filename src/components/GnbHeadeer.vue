@@ -47,7 +47,7 @@ export default class GnbHeader extends Vue {
     currentPath: String = ''
 
     get user() {
-        return this.$store.state.auth.isAuth
+        return this.$store.getters.isAuth
     }
 
     created() {

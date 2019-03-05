@@ -2,7 +2,9 @@
     <div class="article-preview">
         <div class="article-meta">
             <user-info :author="contents.author" :created="createdAt">
-                <button class="btn btn-outline-primary btn-sm pull-xs-right" :class="{active: contents.favorited}">
+                <button class="btn btn-outline-primary btn-sm pull-xs-right"
+                        :class="{active: contents.favorited}"
+                        @click="toggleFavorite(contents.favorited, contents.slug)">
                     <i class="ion-heart"></i> {{ contents.favoritesCount }}
                 </button>
             </user-info>
@@ -32,6 +34,14 @@ export default class ArticlePreview extends Vue {
     get createdAt(): String {
         const date = moment(this.contents.createdAt).format("MMM Do YY")
         return date
+    }
+
+    async toggleFavorite(state: boolean, slug: string) {
+        if (state) {
+            await this.$store.dispatch('unfavoriteArticle', slug)
+        } else {
+            await this.$store.dispatch('favoriteArticle', slug)
+        }
     }
 }
 </script>

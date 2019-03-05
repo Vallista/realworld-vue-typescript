@@ -14,7 +14,7 @@ import {Component} from 'vue-property-decorator'
 @Component
 export default class ErrorMessageList extends Vue {
     get errors() {
-        return this.$store.state.auth.errors
+        return this.$store.getters.errors
     }
 
 }

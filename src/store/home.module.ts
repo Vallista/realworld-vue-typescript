@@ -25,11 +25,17 @@ const state: HomeState = {
 }
 
 const getters = {
-    articlesList(state: HomeState) {
+    articles(state: HomeState) {
         return state.articles
+    },
+    articleListIsLoading(state: HomeState) {
+        return state.articleListIsLoading
     },
     tagsList(state: HomeState) {
         return state.tags
+    },
+    feedTabMenus(state: HomeState) {
+        return state.feedTabMenus
     }
 }
 
@@ -72,7 +78,15 @@ const mutations = {
             isAuth: false,
         })
         state.feedTabMenus = arr
-    }
+    },
+    changeArticle(state: any, {slug, favorited, favoritesCount}: any) {
+        state.articles.forEach((article: any) => {
+            if (article.slug === slug ) {
+                article.favorited = favorited
+                article.favoritesCount = favoritesCount
+            }
+        })
+    },
 }
 
 const actions = {
@@ -92,7 +106,7 @@ const actions = {
 
     async getArticlesByFilter({ commit }: any, filter: Object) {
         commit('clearArticles')
-        const result = await apiService.get('/api/articles/', { params: filter })
+        const result = await apiService.get('/articles/',  { params: filter })
         commit('setArticles', result.data.articles)
         commit('setArticlesCount', result.data.articlesCount)
     },

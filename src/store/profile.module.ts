@@ -18,15 +18,15 @@ const mutations = {
 
 const actions = {
     async getProfile({commit}: any, username: string) {
-        const result = await apiService.get(`/profile/${username}`)
+        const result = await apiService.get(`/profiles/${username}`)
         commit('setProfile', result.data.profile)
     },
     async followUser({commit}: any, username: string) {
-        const result = await apiService.post(`/articles/${username}/follow`)
+        const result = await apiService.post(`/profiles/${username}/follow`)
         commit('setProfile', result.data.profile)
     },
     async unfollowUser({commit}: any, username: string) {
-        const result = await apiService.delete(`/articles/${username}/follow`)
+        const result = await apiService.delete(`/profiles/${username}/follow`)
         commit('setProfile', result.data.profile)
     },
 }

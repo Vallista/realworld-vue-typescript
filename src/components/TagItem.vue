@@ -1,5 +1,5 @@
 <template>
-    <a class="tag-pill tag-default" @click="getArticlesByTag({ tag })">{{ tag }}</a>
+    <a class="tag-pill tag-default" @click="getArticlesByTag(tag)">{{ tag }}</a>
 </template>
 
 <script lang="ts">
@@ -10,9 +10,9 @@ import {Component, Prop} from 'vue-property-decorator'
 export default class TagItem extends Vue {
     @Prop(String) tag?: string
 
-    async getArticlesByTag(params: any) {
-        this.$store.dispatch('changeTabByTag', params.tag)
-        this.$store.dispatch('getArticlesByFilter', params)
+    async getArticlesByTag(tag: any) {
+        this.$store.dispatch('changeTabByTag', tag)
+        this.$store.dispatch('getArticlesByFilter', { tag })
     }
 }
 </script>

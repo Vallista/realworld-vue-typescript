@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-md-9">
                     <feed-tab/>
-                    <article-list :articles="articlesList"/>
+                    <article-list :articles="articles"/>
                 </div>
                 <div class="col-md-3">
                     <div class="sidebar">
@@ -45,17 +45,17 @@ import TagItem from "@/components/TagItem.vue";
 export default class Home extends Vue {
     @Prop(String) contents?: string
 
-    get auth() {
-        return this.$store.state.auth.isAuth
+    get auth(): boolean {
+        return this.$store.getters.isAuth
     }
-    get articlesList(): Array<object> {
-        return this.$store.getters.articlesList
+    get articles(): Array<object> {
+        return this.$store.getters.articles
     }
     get tagsList(): Array<string> {
         return this.$store.getters.tagsList
     }
 
-    async created() {
+    created() {
         this.$store.dispatch('getGlobalArticles')
         this.$store.dispatch('getTags')
     }

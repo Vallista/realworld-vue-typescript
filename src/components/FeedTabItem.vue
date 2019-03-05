@@ -19,7 +19,7 @@
 
         get isVisible(): boolean {
             if (this.item && this.item.isAuth) {
-                return this.item.isAuth === this.$store.state.auth.isAuth
+                return this.item.isAuth === this.$store.getters.isAuth
             }
             return true
         }

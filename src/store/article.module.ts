@@ -3,21 +3,53 @@ import {ApiService} from "./util"
 const apiService = new ApiService
 
 const state = {
-    currentArticle: null,
-    currentCommentsList: [{}],
+    article: {
+        slug: '',
+        title: '',
+        description: '',
+        body: '',
+        tagList: [''],
+        createdAt: '',
+        updatedAt: '',
+        favorited: false,
+        favoritesCount: 0,
+        author: {
+            username: '',
+            bio: '',
+            image: '',
+            following: false
+        }
+    },
+    commentList: [{
+        id: 0,
+        createdAt: '',
+        updatedAt: '',
+        body: '',
+        author: {
+            username: '',
+            bio: '',
+            image: '',
+            following: false
+        }
+    }],
 }
 
 const getters = {
-
+    article(state?: any) {
+        return state.article
+    },
+    commentList(state?: any) {
+        return state.commentList
+    }
 }
 
 const mutations = {
     setArticle(state: any, article?: object) {
-        state.currentArticle = article
+        state.article = article
     },
     setComments(state: any, comments: any) {
-        state.currentCommentsList = comments
-    }
+        state.commentList = comments
+    },
 }
 
 const actions = {
@@ -52,14 +84,24 @@ const actions = {
         dispatch('getComments', slug)
     },
 
-    async favoriteArticle({commit}: any, slug: string) {
+    async favoriteArticle({commit, rootState}: any, slug: string) {
         const result = await apiService.post(`/articles/${slug}/favorite`)
         commit('setArticle', result.data.article)
+        commit('changeArticle', {
+            slug: result.data.article.slug,
+            favorited: result.data.article.favorited,
+            favoritesCount: result.data.article.favoritesCount,
+        })
     },
 
     async unfavoriteArticle({commit}: any, slug: string) {
         const result = await apiService.delete(`/articles/${slug}/favorite`)
         commit('setArticle', result.data.article)
+        commit('changeArticle', {
+            slug: result.data.article.slug,
+            favorited: result.data.article.favorited,
+            favoritesCount: result.data.article.favoritesCount,
+        })
     },
 
 }

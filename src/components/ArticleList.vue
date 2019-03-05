@@ -33,7 +33,7 @@ export default class ArticleList extends Vue {
     }
 
     get loadingState(): boolean {
-        return this.$store.state.home.articleListIsLoading
+        return this.$store.getters.articleListIsLoading
     }
 }
 </script>
