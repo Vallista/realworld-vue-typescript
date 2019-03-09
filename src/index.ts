@@ -5,18 +5,18 @@ import index from './store'
 
 
 new Vue({
-    el: "#app",
-    template: `
+  el: "#app",
+  template: `
     <div>
         <real-world/>  
     </div>
     `,
-    data: {
-      name: 'World'
-    },
-    components: {
-        RealWorld
-    },
-    router,
-    store: index
+  data: {
+    name: 'World'
+  },
+  components: {
+    RealWorld
+  },
+  router,
+  store: index
 })

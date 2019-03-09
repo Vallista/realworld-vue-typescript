@@ -29,6 +29,17 @@ module.exports = {
                 options: {
                     appendTsSuffixTo: [/\.vue$/],
                 }
+            },
+            {
+                test: /\.vue.(ts|tsx)$/,
+                exclude: /node_modules/,
+                enforce: 'pre',
+                use: [
+                    {
+                        loader: 'vue-tslint-loader',
+                        options: { /* Loader options go here */ }
+                    }
+                ]
             }
         ]
     },
@@ -41,6 +52,10 @@ module.exports = {
     },
     performance: {
         hints: false
+    },
+    devServer: {
+        historyApiFallback: true,
+        noInfo: true
     },
     devtool: 'source-map',
     plugins: [

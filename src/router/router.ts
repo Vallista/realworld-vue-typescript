@@ -33,7 +33,8 @@ const routes = [
         component: Article,
     },
     {
-        path: '/edit-article',
+        path: '/edit-article/:slug',
+        props: true,
         component: EditArticle,
     },
     {

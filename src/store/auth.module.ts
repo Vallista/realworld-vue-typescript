@@ -45,7 +45,7 @@ const mutations = {
 
 const actions = {
 
-    async registerUser({ commit, dispatch } : any, userParams : RegisterUser) {
+    async registerUser({ commit, dispatch }: any, userParams : RegisterUser) {
         const result = await apiService.post('/users/',{ "user": userParams } )
     },
 
