@@ -1,9 +1,9 @@
-import {FeedTabObj, HomeState} from '../types'
+import {FeedTabObj} from '../types'
 import {ApiService} from "./util"
 
 const apiService = new ApiService
 
-const state: HomeState = {
+const state = {
     articles: [{}],
     articlesCount: 0,
     articleListIsLoading: false,
@@ -25,22 +25,22 @@ const state: HomeState = {
 }
 
 const getters = {
-    articles(state: HomeState) {
+    articles(state: any) {
         return state.articles
     },
-    articleListIsLoading(state: HomeState) {
+    articleListIsLoading(state: any) {
         return state.articleListIsLoading
     },
-    tagsList(state: HomeState) {
+    tagsList(state: any) {
         return state.tags
     },
-    feedTabMenus(state: HomeState) {
+    feedTabMenus(state: any) {
         return state.feedTabMenus
     }
 }
 
 const mutations = {
-    clearArticles(state: HomeState) {
+    clearArticles(state: any) {
         state.articles = [{}]
         state.articleListIsLoading = true
     },
@@ -48,13 +48,13 @@ const mutations = {
         state.articles = payload
         state.articleListIsLoading = false
     },
-    setArticlesCount(state: HomeState, payload: number) {
+    setArticlesCount(state: any, payload: number) {
         state.articlesCount = payload
     },
-    setTags(state: HomeState, payload: Array<string>) {
+    setTags(state: any, payload: Array<string>) {
         state.tags = payload
     },
-    changeFeedTabMenus(state: HomeState, payload: string) {
+    changeTab(state: any, payload: string) {
         state.feedTabMenus.forEach((menu: FeedTabObj) => {
             if (menu.href === payload) {
                 menu.isActive = true
@@ -63,7 +63,7 @@ const mutations = {
             }
         })
     },
-    addFeedTabMenu(state: HomeState, payload: string) {
+    addFeedTabMenu(state: any, payload: string) {
         let arr: Array<FeedTabObj> = []
         state.feedTabMenus.forEach((menu: FeedTabObj) => {
             menu.isActive = false
@@ -115,14 +115,6 @@ const actions = {
         const result = await apiService.get('/tags/')
         commit('setTags', result.data.tags)
     },
-
-    changeTab({commit}: any, tabName: String ) {
-        commit('changeFeedTabMenus', tabName)
-    },
-
-    changeTabByTag({ commit }: any, tagName: String ) {
-        commit('addFeedTabMenu', tagName)
-    }
 
 }
 

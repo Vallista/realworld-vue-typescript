@@ -11,7 +11,7 @@ export default class TagItem extends Vue {
   @Prop(String) tag?: string
 
   async getArticlesByTag (tag: any) {
-    this.$store.dispatch('changeTabByTag', tag)
+    this.$store.commit('addFeedTabMenu', tag)
     this.$store.dispatch('getArticlesByFilter', { tag })
   }
 }

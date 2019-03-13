@@ -1,4 +1,5 @@
 import {ApiService} from "./util"
+import {Article} from "../types";
 
 const apiService = new ApiService
 
@@ -44,7 +45,7 @@ const getters = {
 }
 
 const mutations = {
-    setArticle(state: any, article?: object) {
+    setArticle(state: any, article: Article) {
         state.article = article
     },
     setComments(state: any, comments: any) {
@@ -58,8 +59,12 @@ const actions = {
         commit('setArticle', result.data.article)
     },
 
-    async createArticle({commit}: any, article: object) {
-        const result = await apiService.post('/articles/', { article })
+    async createArticle({commit}: any, article: Article) {
+        try {
+            const result = await apiService.post('/articles/', { article })
+        } catch ({ response }){
+            commit('setErrors', response.data.errors);
+        }
     },
 
     async updateArticle({commit}: any, { slug, article }: any) {

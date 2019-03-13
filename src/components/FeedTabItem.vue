@@ -11,7 +11,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
-import { FeedTabObj } from '../types'
+import { FeedTabObj, Profile } from '../types'
 
 @Component
 export default class FeedTabItem extends Vue {
@@ -31,12 +31,23 @@ export default class FeedTabItem extends Vue {
     return false
   }
 
+  get profile (): Profile {
+    return this.$store.getters.currentProfile
+  }
+
   changeTab (href: string): void {
-    this.$store.dispatch('changeTab', href)
     if (href === 'global') {
+      this.$store.commit('changeTab', href)
       this.$store.dispatch('getGlobalArticles')
     } else if (href === 'feed') {
+      this.$store.commit('changeTab', href)
       this.$store.dispatch('getFeedArticles')
+    } else if (href === 'my') {
+      this.$store.commit('changeProfileTab', href)
+      this.$store.dispatch('getArticlesByFilter', { author: this.profile.username })
+    } else if (href === 'favorited') {
+      this.$store.commit('changeProfileTab', href)
+      this.$store.dispatch('getArticlesByFilter', { favorited: this.profile.username })
     } else {
       this.$store.dispatch('getArticlesByFilter', { tag: href })
     }

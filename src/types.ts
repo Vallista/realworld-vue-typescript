@@ -1,11 +1,3 @@
-export interface HomeState {
-    articles: Array<object>
-    articlesCount: number
-    articleListIsLoading: boolean
-    tags: Array<string>
-    feedTabMenus: Array<FeedTabObj>
-}
-
 export interface FeedTabObj {
     title: string
     href: string
@@ -44,4 +36,29 @@ export interface UpdateUser {
     image: string,
     username: string,
     password: string,
+}
+
+export interface Profile {
+    username: string,
+    bio: string,
+    image: string,
+    following: boolean,
+}
+
+export interface Article {
+    slug: string,
+    title: string,
+    description: string,
+    body: string,
+    tagList: Array<string>,
+    createdAt: string,
+    updatedAt: string,
+    favorited: boolean,
+    favoritesCount: number,
+    author: Profile,
+}
+
+export interface Articles {
+    articles: Array<Article>,
+    articlesCount: number,
 }

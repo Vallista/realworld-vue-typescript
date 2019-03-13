@@ -20,8 +20,17 @@ import { FeedTabObj } from '../types'
   }
 })
 export default class FeedTab extends Vue {
+  @Prop(String) location?: string
+
   get menus (): Array<FeedTabObj> {
-    return this.$store.getters.feedTabMenus
+    switch (this.location) {
+      case 'feed':
+        return this.$store.getters.feedTabMenus
+      case 'profile':
+        return this.$store.getters.profileFeedTabMenus
+      default:
+        return this.$store.getters.feedTabMenus
+    }
   }
 }
 </script>

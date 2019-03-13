@@ -1,18 +1,52 @@
 import {ApiService} from "./util"
+import {Profile, FeedTabObj} from "../types"
 
 const apiService = new ApiService
 
 const state = {
-    currentProfile: {}
+    currentProfile: {
+        username: '',
+        bio: '',
+        image: '',
+        following: false,
+    },
+    profileFeedTabMenus: [
+        {
+            title: 'My Articles',
+            href: 'my',
+            isActive: true,
+            isAuth: false,
+        },
+        {
+            title: 'Favorited Articles',
+            href: 'favorited',
+            isActive: false,
+            isAuth: false,
+        }
+    ]
 }
 
 const getters = {
-
+    currentProfile (state: any): Profile {
+        return state.currentProfile
+    },
+    profileFeedTabMenus (state: any): Array<FeedTabObj> {
+        return state.profileFeedTabMenus
+    },
 }
 
 const mutations = {
-    setProfile(state: any, profile?: object) {
+    setProfile (state: any, profile: Profile) {
         state.currentProfile = profile
+    },
+    changeProfileTab(state: any, payload: string) {
+        state.profileFeedTabMenus.forEach((menu: FeedTabObj) => {
+            if (menu.href === payload) {
+                menu.isActive = true
+            } else {
+                menu.isActive = false
+            }
+        })
     },
 }
 

@@ -3,6 +3,7 @@
     <input class="form-control form-control-lg"
            :type="data.inputType"
            :placeholder="data.placeholder"
+           @keyup.enter="enterCallback"
            v-model="value">
   </fieldset>
 </template>

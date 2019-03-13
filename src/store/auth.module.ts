@@ -28,17 +28,21 @@ const mutations = {
         state.errors = errors
     },
 
+    clearError(state: any, errors: any ) {
+        state.errors = []
+    },
+
     setAuth(state: any, user: any) {
         state.isAuth = true
         state.user = user
-        state.errors = {}
+        state.errors = []
         JwtService.saveToken(state.user.token);
     },
 
     purgeAuth(state: any) {
         state.isAuth = false
         state.user = {}
-        state.errors = {}
+        state.errors = []
         JwtService.destroyToken()
     }
 }
