@@ -24,11 +24,11 @@ const getters = {
 }
 
 const mutations = {
-    setErrors(state : any, errors: any ) {
+    setErrors(state : any, errors: Array<string> ) {
         state.errors = errors
     },
 
-    clearError(state: any, errors: any ) {
+    clearError(state: any) {
         state.errors = []
     },
 
@@ -59,12 +59,18 @@ const actions = {
     },
 
     async updateUser({ commit } : any, userParams: UpdateUser) {
-        const result = await apiService.put('/users/', { "user": userParams })
-        commit('setAuth', result.data.user)
+        try {
+            const result = await apiService.put('/user/', { "user": userParams })
+            commit('setAuth', result.data.user)
+        } catch ({response}) {
+            throw response.data.errors
+        }
+
     },
 
     async getCurrentUser({ commit } : any) {
-        const result = await apiService.get('/users/')
+        const result = await apiService.get('/user/')
+        return result.data.user
     },
 
     async checkAuth({commit}: any) {

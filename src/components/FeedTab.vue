@@ -1,8 +1,9 @@
 <template>
   <div class="feed-toggle">
     <ul class="nav nav-pills outline-active">
-      <feed-tab-item v-for="menu in menus"
+      <feed-tab-item v-for="menu in currentTabMenus"
                      :key="menu.index"
+                     @change-tab="changeTab"
                      :item="menu"/>
     </ul>
   </div>
@@ -10,9 +11,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
+import { Component, Prop, Emit } from 'vue-property-decorator'
 import FeedTabItem from './FeedTabItem.vue'
-import { FeedTabObj } from '../types'
+import { TabItem } from '../types'
 
 @Component({
   components: {
@@ -20,16 +21,64 @@ import { FeedTabObj } from '../types'
   }
 })
 export default class FeedTab extends Vue {
-  @Prop(String) location?: string
+  @Prop(Array) menus?: Array<TabItem>
 
-  get menus (): Array<FeedTabObj> {
-    switch (this.location) {
-      case 'feed':
-        return this.$store.getters.feedTabMenus
-      case 'profile':
-        return this.$store.getters.profileFeedTabMenus
-      default:
-        return this.$store.getters.feedTabMenus
+  tabMenus: Array<TabItem> = [
+    {
+      title: '',
+      href: '',
+      isActive: true,
+      isAuth: false
+    }
+  ]
+
+  get currentTabMenus (): Array<TabItem> {
+    return this.tabMenus
+  }
+
+  @Emit('change-tab')
+  changeTab (href: string) {
+    this.tabMenus.forEach((menu: TabItem) => {
+      if (menu.href === href) {
+        menu.isActive = true
+      } else {
+        menu.isActive = false
+      }
+    })
+  }
+
+  addFeedTabMenu (href: string) {
+    let arr: Array<TabItem> = []
+    this.tabMenus.forEach((menu: TabItem) => {
+      menu.isActive = false
+      if (!(menu.title.slice(0,1) === '#')) {
+        arr.push(menu)
+      }
+    })
+    arr.push({
+      title: `# ${href}`,
+      href: href,
+      isActive: true,
+      isAuth: false
+    })
+    this.tabMenus = arr
+  }
+
+  created () {
+    const EventBus = new Vue()
+    // @ts-ignore
+    EventBus.add = this.addFeedTabMenu
+    // @ts-ignore
+    EventBus.changeTo = this.changeTab
+    Object.defineProperties(Vue.prototype, {
+      $tabMenu: {
+        get: () => EventBus,
+        configurable: true
+      }
+    })
+
+    if (this.menus) {
+      this.tabMenus = this.menus
     }
   }
 }

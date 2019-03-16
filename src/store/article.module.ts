@@ -1,5 +1,5 @@
 import {ApiService} from "./util"
-import {Article} from "../types";
+import {Article, CommentData} from "../types";
 
 const apiService = new ApiService
 
@@ -48,7 +48,7 @@ const mutations = {
     setArticle(state: any, article: Article) {
         state.article = article
     },
-    setComments(state: any, comments: any) {
+    setComments(state: any, comments: Array<CommentData>) {
         state.commentList = comments
     },
 }
@@ -57,22 +57,28 @@ const actions = {
     async getArticle({commit}: any, slug: string) {
         const result = await apiService.get(`/articles/${slug}`)
         commit('setArticle', result.data.article)
+        return result.data.article
     },
 
     async createArticle({commit}: any, article: Article) {
         try {
             const result = await apiService.post('/articles/', { article })
         } catch ({ response }){
-            commit('setErrors', response.data.errors);
+            throw response.data.errors
         }
     },
 
     async updateArticle({commit}: any, { slug, article }: any) {
         const result = await apiService.put(`/articles/${slug}`, { article })
+        return result.data.article
     },
 
     async deleteArticle({commit}: any, slug: string) {
-        const result = await apiService.delete(`/articles/${slug}`)
+        try {
+            const result = await apiService.delete(`/articles/${slug}`)
+        } catch {
+            throw false
+        }
     },
 
     async createComment({commit}: any, { slug, comment }: any) {
@@ -89,24 +95,16 @@ const actions = {
         dispatch('getComments', slug)
     },
 
-    async favoriteArticle({commit, rootState}: any, slug: string) {
+    async favoriteArticle({commit}: any, slug: string) {
         const result = await apiService.post(`/articles/${slug}/favorite`)
         commit('setArticle', result.data.article)
-        commit('changeArticle', {
-            slug: result.data.article.slug,
-            favorited: result.data.article.favorited,
-            favoritesCount: result.data.article.favoritesCount,
-        })
+        commit('changeArticle', result.data.article)
     },
 
     async unfavoriteArticle({commit}: any, slug: string) {
         const result = await apiService.delete(`/articles/${slug}/favorite`)
         commit('setArticle', result.data.article)
-        commit('changeArticle', {
-            slug: result.data.article.slug,
-            favorited: result.data.article.favorited,
-            favoritesCount: result.data.article.favoritesCount,
-        })
+        commit('changeArticle', result.data.article)
     },
 
 }

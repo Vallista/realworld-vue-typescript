@@ -32,6 +32,8 @@
               <fieldset class="form-group">
                 <input type="text"
                        class="form-control"
+                       :value="tagInput"
+                       @input="updateTagInput($event.target.value)"
                        @keyup.enter="addTag($event.target.value)"
                        placeholder="Enter tags">
                 <div class="tag-list">
@@ -61,6 +63,7 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import ErrorMessageList from '../../components/ErrorMessageList.vue'
+import { NewArticle } from '../../types'
 
 @Component({
   components: {
@@ -68,12 +71,14 @@ import ErrorMessageList from '../../components/ErrorMessageList.vue'
   }
 })
 export default class CreateArticle extends Vue {
-  
-  editable = {
+
+  tagInput: string = ''
+
+  editable: NewArticle = {
     title: '',
     description: '',
     body: '',
-    tagList: [],
+    tagList: []
   }
 
   updateTitle (value: string) {
@@ -88,14 +93,25 @@ export default class CreateArticle extends Vue {
     this.editable.body = value
   }
 
-  addTag(value: never) {
-    this.editable.tagList.push(value);
+  updateTagInput (value: string) {
+    this.tagInput = value
   }
 
-  submit () {
-    this.$store.dispatch('createArticle', this.editable)
+  addTag (value: string): void {
+    if (value !== '') {
+      this.tagInput = ''
+      this.editable.tagList.push(value)
+    }
   }
 
+  async submit () {
+    try {
+      await this.$store.dispatch('createArticle', this.editable)
+      this.$router.push('/')
+    } catch (errors) {
+      this.$store.commit('setErrors', errors)
+    }
+  }
 }
 </script>
 

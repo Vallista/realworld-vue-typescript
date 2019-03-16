@@ -10,12 +10,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
-import { FeedTabObj, Profile } from '../types'
+import { Component, Prop, Emit } from 'vue-property-decorator'
+import { TabItem, Profile } from '../types'
 
 @Component
 export default class FeedTabItem extends Vue {
-  @Prop() item?: FeedTabObj
+  @Prop() item?: TabItem
 
   get isVisible (): boolean {
     if (this.item && this.item.isAuth) {
@@ -35,22 +35,9 @@ export default class FeedTabItem extends Vue {
     return this.$store.getters.currentProfile
   }
 
+  @Emit('change-tab')
   changeTab (href: string): void {
-    if (href === 'global') {
-      this.$store.commit('changeTab', href)
-      this.$store.dispatch('getGlobalArticles')
-    } else if (href === 'feed') {
-      this.$store.commit('changeTab', href)
-      this.$store.dispatch('getFeedArticles')
-    } else if (href === 'my') {
-      this.$store.commit('changeProfileTab', href)
-      this.$store.dispatch('getArticlesByFilter', { author: this.profile.username })
-    } else if (href === 'favorited') {
-      this.$store.commit('changeProfileTab', href)
-      this.$store.dispatch('getArticlesByFilter', { favorited: this.profile.username })
-    } else {
-      this.$store.dispatch('getArticlesByFilter', { tag: href })
-    }
+    return
   }
 }
 </script>

@@ -1,16 +1,57 @@
-export interface FeedTabObj {
+export interface Profile {
+    username: string,
+    bio: string,
+    image: string,
+    following: boolean,
+}
+
+export interface Article extends NewArticle {
+    slug: string,
+    createdAt: string,
+    updatedAt: string,
+    favorited: boolean,
+    favoritesCount: number,
+    author: Profile,
+}
+
+export interface NewArticle {
+    title: string,
+    description: string,
+    body: string,
+    tagList: Array<string>
+}
+
+export interface Articles {
+    articles: Array<Article>,
+    articlesCount: number,
+}
+
+export interface CommentData {
+    id: number,
+    createdAt: string,
+    updatedAt: string,
+    body: string,
+    author: {
+        username: string,
+        bio: string,
+        image: string,
+        following: boolean
+    }
+}
+
+export interface TabItem {
     title: string
     href: string
     isActive: boolean
     isAuth: boolean
 }
 
-export interface ArticleRequestParams {
+export interface ArticleFilter {
     tag? : string,
     author? : string,
-    favorited? : any,
-    limit? : any,
-    offset? : any
+    favorited? : string,
+    limit? : number,
+    offset? : number
 }
 
 export interface InputFieldProps {
@@ -38,27 +79,13 @@ export interface UpdateUser {
     password: string,
 }
 
-export interface Profile {
-    username: string,
+export interface User {
     bio: string,
-    image: string,
-    following: boolean,
-}
-
-export interface Article {
-    slug: string,
-    title: string,
-    description: string,
-    body: string,
-    tagList: Array<string>,
     createdAt: string,
+    email: string,
+    id: number,
+    image: string,
+    token: string,
     updatedAt: string,
-    favorited: boolean,
-    favoritesCount: number,
-    author: Profile,
-}
-
-export interface Articles {
-    articles: Array<Article>,
-    articlesCount: number,
+    username: string,
 }

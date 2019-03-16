@@ -7,7 +7,7 @@ import EditArticle from '../pages/article/EditArticle.vue'
 import Login from '../pages/login/Login.vue'
 import SignUp from '../pages/login/SignUp.vue'
 import Setting from '../pages/setting/Setting.vue'
-import Profile from '../pages/profile/Profile.vue'
+import Profile from '../pages/profile/ProfilePage.vue'
 
 Vue.use(VueRouter)
 

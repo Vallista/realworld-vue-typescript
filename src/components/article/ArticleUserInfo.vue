@@ -1,6 +1,7 @@
 <template>
   <user-info :author="article.author" :created="createdAt">
     <button class="btn btn-sm btn-outline-secondary"
+            v-if="!isMyArticle"
             :class="{active: article.author.following}"
             @click="toggleFollow(article.author.following, article.author.username)">
       <i class="ion-plus-round"></i>
@@ -9,12 +10,30 @@
     </button>
     &nbsp;&nbsp;
     <button class="btn btn-sm btn-outline-primary"
+            v-if="!isMyArticle"
             :class="{active : article.favorited}"
             @click="toggleFavorite(article.favorited, article.slug)">
       <i class="ion-heart"></i>
       &nbsp;
       {{ article.favorited ? 'Unfavorite' : 'Favorite' }} Post
       <span class="counter"> ({{ article.favoritesCount }})</span>
+    </button>
+
+
+    <button class="btn btn-sm btn-outline-secondary"
+            v-if="isMyArticle"
+            @click="editArticle">
+      <i class="ion-edit"></i>
+      &nbsp;
+      Edit Article
+    </button>
+    &nbsp;&nbsp;
+    <button class="btn btn-sm btn-outline-danger"
+            v-if="isMyArticle"
+            @click="deleteArticle">
+      <i class="ion-trash-a"></i>
+      &nbsp;
+      Delete Article
     </button>
   </user-info>
 </template>
@@ -24,6 +43,7 @@ import Vue from 'vue'
 import moment from 'moment'
 import { Component, Prop } from 'vue-property-decorator'
 import UserInfo from '../UserInfo.vue'
+import { User } from '../../types'
 
 @Component({
   components: {
@@ -32,6 +52,14 @@ import UserInfo from '../UserInfo.vue'
 })
 export default class ArticleUserInfo extends Vue {
   @Prop() article: any
+
+  get isMyArticle (): boolean {
+    return this.user.username === this.article.author.username
+  }
+
+  get user (): User {
+    return this.$store.getters.user
+  }
 
   get createdAt (): string {
     const date = moment(this.article.createdAt).format('MMM Do YY')
@@ -53,7 +81,15 @@ export default class ArticleUserInfo extends Vue {
     } else {
       await this.$store.dispatch('favoriteArticle', slug)
     }
+  }
 
+  async editArticle () {
+    this.$router.push(`/edit-article/${this.article.slug}`)
+  }
+
+  async deleteArticle () {
+    await this.$store.dispatch('deleteArticle', this.article.slug)
+    this.$router.push('/')
   }
 }
 </script>

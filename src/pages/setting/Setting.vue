@@ -20,11 +20,11 @@
                        v-model="username">
               </fieldset>
               <fieldset class="form-group">
-                                <textarea class="form-control form-control-lg"
-                                          rows="8"
-                                          placeholder="Short bio about you"
-                                          v-model="bio">
-                                </textarea>
+                <textarea class="form-control form-control-lg"
+                          rows="8"
+                          placeholder="Short bio about you"
+                          v-model="bio">
+                </textarea>
               </fieldset>
               <fieldset class="form-group">
                 <input class="form-control form-control-lg"
@@ -39,13 +39,17 @@
                        v-model="password">
               </fieldset>
               <button class="btn btn-lg btn-primary pull-xs-right"
+                      type="button"
                       @click="submit">
                 Update Settings
               </button>
             </fieldset>
           </form>
+          <hr>
+          <button class="btn btn-outline-danger" type="button" @click="logout">
+            Or click here to logout.
+          </button>
         </div>
-      
       </div>
     </div>
   </div>
@@ -78,9 +82,26 @@ export default class Setting extends Vue {
         bio: this.bio
       })
       this.$router.push('/')
-    } catch ({ response }) {
-      this.$store.commit('setErrors', response.data.errors)
+    } catch (errors) {
+      this.$store.commit('setErrors', errors)
     }
+  }
+
+  async logout () {
+    await this.$store.dispatch('logout')
+    this.$router.push('/')
+  }
+
+  async init () {
+    const user = await this.$store.dispatch('getCurrentUser')
+    this.username = user.username
+    this.email = user.email
+    this.image = user.image
+    this.bio = user.bio
+  }
+
+  created () {
+    this.init()
   }
 }
 </script>

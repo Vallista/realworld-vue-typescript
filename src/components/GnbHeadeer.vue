@@ -8,27 +8,29 @@
             Home
           </router-link>
         </li>
-        <li class="nav-item" v-if="user">
+        <li class="nav-item" v-if="isAuth">
           <router-link to="/create-article" class="nav-link" :class="{active: currentPath === '/create-article'}">
-            <i class="ion-compose"></i>&nbsp;New Post
+            <i class="ion-compose"></i>&nbsp;New Article
           </router-link>
         </li>
-        <li class="nav-item" v-if="user">
+        <li class="nav-item" v-if="isAuth">
           <router-link to="/setting" class="nav-link" :class="{active: currentPath === '/setting'}">
             <i class="ion-gear-a"></i>&nbsp;Settings
           </router-link>
         </li>
-        <li class="nav-item" v-if="user">
-          <a class="nav-link" @click="logout">
-            <i class="ion-gear-a"></i>&nbsp;Logout
+        <li class="nav-item" v-if="isAuth">
+          <a class="nav-link"
+             @click="myProfile"
+             :class="{active: currentPath === `/profile/${user.username}`}">
+            {{ user.username }}
           </a>
         </li>
-        <li class="nav-item" v-if="!user">
+        <li class="nav-item" v-if="!isAuth">
           <router-link to="/login" class="nav-link" :class="{active: currentPath === '/login'}">
             Sign in
           </router-link>
         </li>
-        <li class="nav-item" v-if="!user">
+        <li class="nav-item" v-if="!isAuth">
           <router-link to="/register" class="nav-link" :class="{active: currentPath === '/register'}">
             Sign up
           </router-link>
@@ -47,6 +49,10 @@ export default class GnbHeader extends Vue {
   currentPath: String = ''
 
   get user () {
+    return this.$store.getters.user
+  }
+
+  get isAuth () {
     return this.$store.getters.isAuth
   }
 
@@ -54,9 +60,8 @@ export default class GnbHeader extends Vue {
     this.currentPath = this.$route.path
   }
 
-  logout () {
-    this.$store.dispatch('logout')
-    this.$router.push('/')
+  myProfile () {
+    this.$router.push(`/profile/${this.user.username}`)
   }
 
   @Watch('$route')
