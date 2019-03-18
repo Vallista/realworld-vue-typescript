@@ -10,6 +10,7 @@
       <div class="row">
         <div class="col-md-9">
           <feed-tab :menus="tabMenus"
+                    ref="feedTab"
                     @change-tab="changeTab"/>
           <article-list :articles="articles"
                         :is-loading="isArticlesLoading"/>
@@ -21,7 +22,7 @@
               <tag-item v-for="tag in tagsList"
                         :key="tag.index"
                         :tag="tag"
-                        @get-articles-by-tag="getArticles('getArticlesByFilter', { tag })"/>
+                        @select-tag="selectTag(tag)"/>
             </div>
           </div>
         </div>
@@ -46,8 +47,7 @@ import { Article, ArticleFilter, TabItem } from '../../types'
   }
 })
 export default class Home extends Vue {
-  @Prop(String) contents?: string
-
+  $refs!: { feedTab: HTMLFormElement }
   tabMenus: Array<TabItem> = [
     {
       title: 'Your Feed',
@@ -63,7 +63,7 @@ export default class Home extends Vue {
     }
   ]
 
-  articles?: Array<Article> = []
+  articles: Array<Article> = []
   isArticlesLoading: boolean = false
   articlesCount: number = 0
 
@@ -89,6 +89,11 @@ export default class Home extends Vue {
         this.getArticles('getGlobalArticles')
         break
     }
+  }
+
+  selectTag (tag: string) {
+    this.$refs.feedTab.addFeedTabMenu(tag)
+    this.getArticles('getArticlesByFilter', { tag })
   }
 
   async getArticles (dispatch: string, param?: ArticleFilter) {

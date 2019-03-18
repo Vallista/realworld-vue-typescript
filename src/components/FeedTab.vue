@@ -21,7 +21,7 @@ import { TabItem } from '../types'
   }
 })
 export default class FeedTab extends Vue {
-  @Prop(Array) menus?: Array<TabItem>
+  @Prop(Array) menus!: Array<TabItem>
 
   tabMenus: Array<TabItem> = [
     {
@@ -65,21 +65,7 @@ export default class FeedTab extends Vue {
   }
 
   created () {
-    const EventBus = new Vue()
-    // @ts-ignore
-    EventBus.add = this.addFeedTabMenu
-    // @ts-ignore
-    EventBus.changeTo = this.changeTab
-    Object.defineProperties(Vue.prototype, {
-      $tabMenu: {
-        get: () => EventBus,
-        configurable: true
-      }
-    })
-
-    if (this.menus) {
-      this.tabMenus = this.menus
-    }
+    this.tabMenus = this.menus
   }
 }
 </script>
