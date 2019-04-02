@@ -13,7 +13,7 @@
 import Vue from 'vue'
 import { Component, Prop, Emit } from 'vue-property-decorator'
 import FeedTabItem from './FeedTabItem.vue'
-import { TabItem } from '../types'
+import { TabItem } from '../../types'
 
 @Component({
   components: {

@@ -11,7 +11,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop, Emit } from 'vue-property-decorator'
-import { TabItem, Profile } from '../types'
+import { TabItem, Profile } from '../../types'
 
 @Component
 export default class FeedTabItem extends Vue {

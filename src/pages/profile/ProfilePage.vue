@@ -49,7 +49,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
-import FeedTab from '../../components/FeedTab.vue'
+import FeedTab from '../../components/feed-tab/FeedTab.vue'
 import ArticleList from '../../components/article/ArticleList.vue'
 import { Article, TabItem, Profile, ArticleFilter } from '../../types'
 
