@@ -2,11 +2,15 @@
 # Created by https://www.gitignore.io/api/macos,webstorm
 # Edit at https://www.gitignore.io/?templates=macos,webstorm
 
+node_modules/
+dist/
+
 ### macOS ###
 # General
 .DS_Store
 .AppleDouble
 .LSOverride
+.idea
 
 # Icon must end with two \r
 Icon
