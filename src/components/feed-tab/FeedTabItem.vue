@@ -2,7 +2,7 @@
   <li class="nav-item" v-if="isVisible">
     <a class="nav-link"
        :class="{active: isActive}"
-       @click="changeTab(item.href)">
+       @click="changeTab(item)">
       {{ item.title }}
     </a>
   </li>
@@ -15,7 +15,7 @@ import { TabItem, Profile } from '../../types'
 
 @Component
 export default class FeedTabItem extends Vue {
-  @Prop() item?: TabItem
+  @Prop(Object) item!: TabItem
 
   get isVisible (): boolean {
     if (this.item && this.item.isAuth) {
@@ -36,7 +36,7 @@ export default class FeedTabItem extends Vue {
   }
 
   @Emit('change-tab')
-  changeTab (href: string): void {
+  changeTab (item: TabItem): void {
     return
   }
 }

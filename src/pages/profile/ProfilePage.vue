@@ -36,8 +36,12 @@
       <div class="row">
         
         <div class="col-xs-12 col-md-10 offset-md-1">
-          <feed-tab @change-tab="changeTab" :menus="currentTabMenus"/>
-          <article-list :articles="currentArticles" :is-loading="isArticlesLoading"/>
+          <feed-tab :menus="tabMenus"
+                    ref="feedTab"
+                    @change-tab="changeTab"/>
+          <article-list :current-page="currentPage"
+                        @changePage="changePage"
+                        :list-status="listStatus"/>
         </div>
       
       </div>
@@ -51,7 +55,7 @@ import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
 import FeedTab from '../../components/feed-tab/FeedTab.vue'
 import ArticleList from '../../components/article/ArticleList.vue'
-import { Article, TabItem, Profile, ArticleFilter } from '../../types'
+import { TabItem, Profile, ArticleFilter, ListStatus } from '../../types'
 
 @Component({
   components: {
@@ -67,27 +71,14 @@ export default class ProfilePage extends Vue {
     following: false
   }
 
-  tabMenus: Array<TabItem> = [
-    {
-      title: 'My Articles',
-      href: 'my',
-      isActive: true,
-      isAuth: false
+  tabMenus: Array<TabItem> = []
+
+  listStatus: ListStatus = {
+    dispatch: 'getArticles',
+    filter: {
+      limit: 10
     },
-    {
-      title: 'Favorited Articles',
-      href: 'favorited',
-      isActive: false,
-      isAuth: false
-    }
-  ]
-  isArticlesLoading: boolean = false
-
-  articles: Array<Article> = []
-  articlesCount: number = 0
-
-  get currentArticles () {
-    return this.articles
+    page: 1
   }
 
   get currentTabMenus () {
@@ -106,25 +97,63 @@ export default class ProfilePage extends Vue {
     return this.user.username === this.paramUsername
   }
 
-  changeTab (href: string) {
-    switch (href) {
-      case 'my':
-        this.getArticles('getArticlesByFilter', { author: this.paramUsername })
-        break
-      case 'favorited':
-        this.getArticles('getArticlesByFilter', { favorited: this.paramUsername })
-        break
-      default:
-        this.getArticles('getGlobalArticles')
-        break
+  setListStatus (dispatch: string, filter: ArticleFilter, page: number) {
+    this.listStatus = {
+      dispatch,
+      filter,
+      page
     }
+  }
+
+  changePage (page: number) {
+    if (this.listStatus.filter.tag) {
+      this.setListStatus(this.listStatus.dispatch, {
+        offset: page * 10,
+        limit: 10 ,
+        tag: this.listStatus.filter.tag
+      }, page)
+    } else {
+      this.setListStatus(this.listStatus.dispatch, { offset: page * 10, limit: 10 }, page)
+    }
+  }
+
+  changeTab (item: TabItem) {
+    if (item.filter) {
+      this.setListStatus(item.dispatch, item.filter, 1)
+    }
+  }
+  setTabMenu () {
+    this.tabMenus = [
+      {
+        title: 'My Articles',
+        dispatch: 'getArticles',
+        filter: {
+          author: this.paramUsername,
+          limit: 10
+        },
+        isActive: true,
+        isAuth: false
+      },
+      {
+        title: 'Favorited Articles',
+        dispatch: 'getArticles',
+        filter: {
+          favorited: this.paramUsername,
+          limit: 10
+        },
+        isActive: false,
+        isAuth: false
+      }
+    ]
   }
 
   async toggleFollow (state: boolean, username: string) {
     if (state) {
-      await this.$store.dispatch('unfollowUser', username)
+      const profile = await this.$store.dispatch('unfollowUser', username)
+      this.currentProfile = profile
     } else {
-      await this.$store.dispatch('followUser', username)
+      const profile = await this.$store.dispatch('followUser', username)
+      this.currentProfile = profile
     }
     await this.$store.dispatch('getProfile', this.paramUsername)
   }
@@ -132,24 +161,12 @@ export default class ProfilePage extends Vue {
   async getProfile () {
     const profile = await this.$store.dispatch('getProfile', this.paramUsername)
     this.currentProfile = profile
+    this.setListStatus('getArticles', { author: this.paramUsername }, 1)
   }
 
-  async getArticles (dispatch: string, param?: ArticleFilter) {
-    this.isArticlesLoading = true
-    let articles
-    if (param) {
-      articles = await this.$store.dispatch(dispatch, param)
-    } else {
-      articles = await this.$store.dispatch(dispatch)
-    }
-    this.articles = articles.articles
-    this.articlesCount = articles.articlesCount
-    this.isArticlesLoading = false
-  }
-
-  init () {
+  async init () {
     this.getProfile()
-    this.getArticles('getArticlesByFilter', { author: this.paramUsername })
+    this.setTabMenu()
   }
 
   async created () {

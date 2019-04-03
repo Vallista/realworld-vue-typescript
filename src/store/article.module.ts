@@ -33,7 +33,7 @@ const state = {
             following: false
         }
     }],
-}
+};
 
 const getters = {
     article(state?: any) {
@@ -42,7 +42,7 @@ const getters = {
     commentList(state?: any) {
         return state.commentList
     }
-}
+};
 
 const mutations = {
     setArticle(state: any, article: Article) {
@@ -51,7 +51,7 @@ const mutations = {
     setComments(state: any, comments: Array<CommentData>) {
         state.commentList = comments
     },
-}
+};
 
 const actions = {
     async getArticle({commit}: any, slug: string) {
@@ -98,16 +98,15 @@ const actions = {
     async favoriteArticle({commit}: any, slug: string) {
         const result = await apiService.post(`/articles/${slug}/favorite`)
         commit('setArticle', result.data.article)
-        commit('changeArticle', result.data.article)
+        return result.data.article
     },
 
     async unfavoriteArticle({commit}: any, slug: string) {
         const result = await apiService.delete(`/articles/${slug}/favorite`)
         commit('setArticle', result.data.article)
-        commit('changeArticle', result.data.article)
+        return result.data.article
     },
-
-}
+};
 
 export default {
     state,

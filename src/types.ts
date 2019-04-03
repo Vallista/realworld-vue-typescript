@@ -14,6 +14,12 @@ export interface Article extends NewArticle {
     author: Profile,
 }
 
+export interface ListStatus {
+    dispatch: string,
+    filter: ArticleFilter
+    page: number,
+}
+
 export interface NewArticle {
     title: string,
     description: string,
@@ -41,7 +47,8 @@ export interface CommentData {
 
 export interface TabItem {
     title: string
-    href: string
+    dispatch: string
+    filter?: ArticleFilter,
     isActive: boolean
     isAuth: boolean
 }

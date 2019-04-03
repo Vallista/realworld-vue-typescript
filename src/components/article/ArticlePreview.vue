@@ -1,18 +1,23 @@
 <template>
   <div class="article-preview">
     <div class="article-meta">
-      <user-info :author="contents.author" :created="createdAt">
+      <user-info :author="editable.author" :created="createdAt">
         <button class="btn btn-outline-primary btn-sm pull-xs-right"
-                :class="{active: contents.favorited}"
-                @click="toggleFavorite(contents.favorited, contents.slug)">
-          <i class="ion-heart"></i> {{ contents.favoritesCount }}
+                :class="{active: editable.favorited}"
+                @click="toggleFavorite(editable.favorited, editable.slug)">
+          <i class="ion-heart"></i> {{ editable.favoritesCount }}
         </button>
       </user-info>
     </div>
-    <router-link :to="`/article/${contents.slug}`" class="preview-link">
-      <h1>{{ contents.title }}</h1>
-      <p>{{ contents.description }}</p>
+    <router-link :to="`/article/${editable.slug}`" class="preview-link">
+      <h1>{{ editable.title }}</h1>
+      <p>{{ editable.description }}</p>
       <span>Read more...</span>
+      <ul class="tag-list">
+        <li class="tag-default tag-pill tag-outline" v-for="tag in editable.tagList" :key="tag.index">
+          <span>{{ tag }}</span>
+        </li>
+      </ul>
     </router-link>
   </div>
 </template>
@@ -22,6 +27,7 @@ import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 import moment from 'moment'
 import UserInfo from '../UserInfo.vue'
+import { Article } from '../../types'
 
 @Component({
   components: {
@@ -29,22 +35,38 @@ import UserInfo from '../UserInfo.vue'
   }
 })
 export default class ArticlePreview extends Vue {
+  @Prop(Object) value!: Article
   @Prop(Object) contents?: any
 
+  editable!: Article
+
   get createdAt (): String {
-    const date = moment(this.contents.createdAt).format('MMM Do YY')
+    const date = moment(this.value.createdAt).format('MMM Do YY')
     return date
   }
 
   async toggleFavorite (state: boolean, slug: string) {
     if (state) {
-      await this.$store.dispatch('unfavoriteArticle', slug)
+      const result = await this.$store.dispatch('unfavoriteArticle', slug)
+      this.editable = result
+      this.$emit('input', this.editable)
     } else {
-      await this.$store.dispatch('favoriteArticle', slug)
+      const result = await this.$store.dispatch('favoriteArticle', slug)
+      this.editable = result
+      this.$emit('input', this.editable)
     }
+  }
+
+  created () {
+    this.editable = this.value
   }
 }
 </script>
 
-<style>
+<style scoped>
+  .tag-list {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
 </style>

@@ -12,8 +12,9 @@
             <input-field-common v-for="fieldData in fieldDataList"
                                 :key="fieldData.index"
                                 :fieldData="fieldData"
-                                @emit="getInputValue"/>
-            <button class="btn btn-lg btn-primary pull-xs-right" @click="register">
+                                @emit="getInputValue"
+                                :enter-callback="register"/>
+            <button class="btn btn-lg btn-primary pull-xs-right" type="button" @click="register">
               Sign up
             </button>
           </form>

@@ -26,7 +26,7 @@ export default class FeedTab extends Vue {
   tabMenus: Array<TabItem> = [
     {
       title: '',
-      href: '',
+      dispatch: '',
       isActive: true,
       isAuth: false
     }
@@ -37,9 +37,9 @@ export default class FeedTab extends Vue {
   }
 
   @Emit('change-tab')
-  changeTab (href: string) {
+  changeTab (item: TabItem) {
     this.tabMenus.forEach((menu: TabItem) => {
-      if (menu.href === href) {
+      if (menu.title === item.title) {
         menu.isActive = true
       } else {
         menu.isActive = false
@@ -57,7 +57,11 @@ export default class FeedTab extends Vue {
     })
     arr.push({
       title: `# ${href}`,
-      href: href,
+      dispatch: 'getArticles',
+      filter: {
+        tag: href,
+        limit: 10
+      },
       isActive: true,
       isAuth: false
     })

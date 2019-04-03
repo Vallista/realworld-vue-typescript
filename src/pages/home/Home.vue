@@ -12,8 +12,8 @@
           <feed-tab :menus="tabMenus"
                     ref="feedTab"
                     @change-tab="changeTab"/>
-          <article-list :articles="articles"
-                        :is-loading="isArticlesLoading"/>
+          <article-list @changePage="changePage"
+                        :list-status="listStatus"/>
         </div>
         <div class="col-md-3">
           <div class="sidebar">
@@ -37,7 +37,7 @@ import { Component } from 'vue-property-decorator'
 import FeedTab from '@/components/feed-tab/FeedTab.vue'
 import ArticleList from '@/components/article/ArticleList.vue'
 import TagItem from '@/components/TagItem.vue'
-import { Article, ArticleFilter, TabItem } from '../../types'
+import { ArticleFilter, ListStatus, TabItem } from '../../types'
 
 @Component({
   components: {
@@ -51,21 +51,26 @@ export default class Home extends Vue {
   tabMenus: Array<TabItem> = [
     {
       title: 'Your Feed',
-      href: 'feed',
+      dispatch: 'getFeedArticles',
       isActive: false,
       isAuth: true
     },
     {
       title: 'Global Feed',
-      href: 'global',
+      dispatch: 'getArticles',
       isActive: true,
       isAuth: false
     }
   ]
 
-  articles: Array<Article> = []
-  isArticlesLoading: boolean = false
-  articlesCount: number = 0
+  listStatus: ListStatus = {
+    dispatch: 'getArticles',
+    filter: {
+      limit: 10,
+      offset: 0
+    },
+    page: 1
+  }
 
   tags: Array<string> = []
 
@@ -77,36 +82,33 @@ export default class Home extends Vue {
     return this.tags
   }
 
-  changeTab (href: string) {
-    switch (href) {
-      case 'global':
-        this.getArticles('getGlobalArticles')
-        break
-      case 'feed':
-        this.getArticles('getFeedArticles')
-        break
-      default:
-        this.getArticles('getGlobalArticles')
-        break
+  setListStatus (dispatch: string, filter: ArticleFilter, page: number) {
+    this.listStatus = {
+      dispatch,
+      filter,
+      page
+    }
+  }
+
+  changePage (page: number) {
+    if (this.listStatus.filter.tag) {
+      this.setListStatus(this.listStatus.dispatch, { offset: page * 10, limit: 10 , tag: this.listStatus.filter.tag }, page)
+    } else {
+      this.setListStatus(this.listStatus.dispatch, { offset: page * 10, limit: 10 }, page)
+    }
+  }
+
+  changeTab (item: TabItem) {
+    if (item.filter) {
+      this.setListStatus(item.dispatch, item.filter, 1)
+    } else {
+      this.setListStatus(item.dispatch, { limit: 10 }, 1)
     }
   }
 
   selectTag (tag: string) {
     this.$refs.feedTab.addFeedTabMenu(tag)
-    this.getArticles('getArticlesByFilter', { tag })
-  }
-
-  async getArticles (dispatch: string, param?: ArticleFilter) {
-    this.isArticlesLoading = true
-    let articles
-    if (param) {
-      articles = await this.$store.dispatch(dispatch, param)
-    } else {
-      articles = await this.$store.dispatch(dispatch)
-    }
-    this.articles = articles.articles
-    this.articlesCount = articles.articlesCount
-    this.isArticlesLoading = false
+    this.setListStatus('getArticles', { tag, limit: 10 } , 1)
   }
 
   async getTags () {
@@ -115,7 +117,6 @@ export default class Home extends Vue {
   }
 
   init () {
-    this.getArticles('getGlobalArticles')
     this.getTags()
   }
 

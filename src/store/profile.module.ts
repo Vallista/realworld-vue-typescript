@@ -22,11 +22,11 @@ const actions = {
     },
     async followUser({commit}: any, username: string) {
         const result = await apiService.post(`/profiles/${username}/follow`)
-        commit('setProfile', result.data.profile)
+        return result.data.profile
     },
     async unfollowUser({commit}: any, username: string) {
         const result = await apiService.delete(`/profiles/${username}/follow`)
-        commit('setProfile', result.data.profile)
+        return result.data.profile
     },
 }
 
