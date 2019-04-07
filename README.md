@@ -18,8 +18,9 @@ Before contributing please read the following:
 2. [RealWorld frontend instructions](https://github.com/gothinkster/realworld-starter-kit/blob/master/FRONTEND_INSTRUCTIONS.md)
 3. [Realworld API endpoints](https://github.com/gothinkster/realworld/tree/master/api)
 4. [Vue.js styleguide](https://vuejs.org/v2/style-guide/index.html). Priority A and B categories must be respected.
+5. [TypeScript](https://www.typescriptlang.org/docs/home.html)
 
-The stack is built using [vue-cli webpack](https://github.com/vuejs-templates/webpack) so to get started all you have to do is:
+The stack not using [vue-cli](https://cli.vuejs.org/). Therefore, you can experience projects that do not use vue-cli.
 
 ``` bash
 # install dependencies
@@ -42,3 +43,12 @@ Current arbitrary choices are:
 - Vuex modules for store
 - Vue-axios for ajax requests
 - vue-class-components, vue-property-decorator for using typescript in vue SFC
+
+# Created By
+
+<div style="display: flex; flex-direction: row; justify-contents: center; align-items: center; align-contents: center;">
+  <div style="width: auto; height: auto">
+    <img src="https://avatars3.githubusercontent.com/u/20161023?s=460&v=4" style="width: 82px; height: 82px;"/>
+    <span><a htef="https://github.com/mopsyshin">Mopsyshin</a></span>
+  </div>
+</div>
