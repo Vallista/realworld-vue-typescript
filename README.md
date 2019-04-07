@@ -46,9 +46,7 @@ Current arbitrary choices are:
 
 # Created By
 
-<div style="display: flex; flex-direction: row; justify-contents: center; align-items: center; align-contents: center;">
-  <div style="width: auto; height: auto">
-    <img src="https://avatars3.githubusercontent.com/u/20161023?s=460&v=4" style="width: 82px; height: 82px;"/>
-    <span><a htef="https://github.com/mopsyshin">Mopsyshin</a></span>
-  </div>
+<div style="display: flex; flex-direction: columns; justify-contents: center; align-items: center; align-contents: center;">
+  <img src="https://avatars3.githubusercontent.com/u/20161023?s=460&v=4" style="width: 82px; height: 82px;"/>
+  <span><a htef="https://github.com/mopsyshin">Mopsyshin</a></span>
 </div>
