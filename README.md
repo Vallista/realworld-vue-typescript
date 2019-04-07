@@ -46,14 +46,24 @@ Current arbitrary choices are:
 
 # Contributor
 
-<div style="display: flex; flex-direction: row; justify-contents: center; align-items: center; align-contents: center; width: 100%">
-  <div style="width: auto; height: auto; display: flex; flex-direction: column; justify-contents: center; align-items: center; align-contents: center; cursor: pointer; margin-right: 20px;" onclick="window.location='https://github.com/mopsyshin'">
-    <img src="https://avatars3.githubusercontent.com/u/20161023?s=460&v=4" style="width: 64px; height: 64px;"/>
-    <span><a htef="https://github.com/mopsyshin">Mopsyshin</a></span>
-  </div>
 
-  <div style="width: auto; height: auto; display: flex; flex-direction: column; justify-contents: center; align-items: center; align-contents: center; cursor: pointer;" onclick="window.location='https://github.com/vallista'">
-    <img src="https://avatars2.githubusercontent.com/u/6455767?s=460&v=4" style="width: 64px; height: 64px;"/>
-    <span><a htef="https://github.com/vallista">Vallista</a></span>
-  </div>
-</div>
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top">
+        <img width="150" height="150" src="https://avatars3.githubusercontent.com/u/20161023?s=460&v=4">
+        <br>
+        <a href="https://github.com/mopsyshin">Mopsy Shin</a>
+        <br>
+        <p>Contributor</p>
+      </td>
+        <td align="center" valign="top">
+          <img width="150" height="150" src="https://avatars2.githubusercontent.com/u/6455767?s=460&v=4">
+          <br>
+          <a href="https://github.com/vallista">Vallista</a>
+          <br>
+          <p>Contributor</p>
+        </td>
+    </tr>
+  </tbody>
+</table>
